@@ -1,0 +1,310 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Generator Label TOGA</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=Fraunces:ital,wght@0,600;0,700;1,500&family=Nunito:wght@400;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Baloo+2:wght@600;700;800&family=Cormorant+Garamond:wght@500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+/* Layout: daftar label di atas, form di kiri, pratinjau dan tombol unduh di kanan. */
+:root{
+  --bg:#F0F3EA; --panel:#FFFFFF; --ink:#17261D; --muted:#55645A; --line:#D3D9CC;
+  --accent:#1F6B45; --accent-ink:#FFFFFF; --stage:#DCE1D4; --warn:#8A4306; --warnbg:#FBEBD3;
+  --font-display:'Bricolage Grotesque','IBM Plex Sans',system-ui,sans-serif;
+  --font-body:'IBM Plex Sans',system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#101713; --panel:#18221C; --ink:#E6EEE5; --muted:#9DB0A2; --line:#2B3A31;
+  --accent:#6FCB92; --accent-ink:#0E2016; --stage:#0B100D; --warn:#F2B36B; --warnbg:#3A2A14; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#101713; --panel:#18221C; --ink:#E6EEE5; --muted:#9DB0A2; --line:#2B3A31;
+  --accent:#6FCB92; --accent-ink:#0E2016; --stage:#0B100D; --warn:#F2B36B; --warnbg:#3A2A14; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.45;
+  padding-block:20px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+h1{font-family:var(--font-display);font-size:30px;line-height:1.1;margin:0;text-wrap:balance}
+h2{font-family:var(--font-display);font-size:17px;margin:0}
+.sub{margin:6px 0 0;color:var(--muted);max-width:60ch}
+.listhead{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.thumbs{display:flex;gap:12px;overflow-x:auto;padding:4px 2px 10px}
+.thumb{flex:none;background:var(--panel);border:2px solid var(--line);border-radius:12px;padding:8px;cursor:pointer;display:flex;flex-direction:column;gap:6px;align-items:flex-start;font:inherit;color:inherit;text-align:left;max-width:190px}
+.thumb[aria-current="true"]{border-color:var(--accent)}
+.thumb .tv{overflow:hidden;border-radius:6px;background:var(--stage)}
+.thumb b{font-size:13px;display:block}
+.thumb span.m{font-size:12px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:minmax(0,430px) minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:880px){.grid{grid-template-columns:minmax(0,1fr)}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.field{display:flex;flex-direction:column;gap:5px;min-width:0}
+.field label,.lab{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.hint{font-size:12px;color:var(--muted)}
+input[type=text],textarea,select{font:inherit;font-size:15px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:9px 11px;width:100%}
+textarea{resize:vertical;min-height:96px}
+input:focus-visible,textarea:focus-visible,select:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.row2{display:grid;grid-template-columns:1fr 110px;gap:10px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{font:inherit;font-size:14px;font-weight:500;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:999px;padding:7px 14px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn{font:inherit;font-size:14px;font-weight:600;border-radius:9px;padding:10px 16px;border:1.5px solid var(--accent);background:var(--accent);color:var(--accent-ink);cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn.danger{background:transparent;color:var(--warn);border-color:var(--warn)}
+.btn[disabled]{opacity:.55;cursor:default}
+.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.stagebox{background:var(--stage);border-radius:12px;padding:16px;display:flex;justify-content:center;overflow:hidden}
+.paper{box-shadow:0 6px 24px rgba(0,0,0,.28);overflow:hidden}
+.paper>div{transform-origin:top left}
+.fitmsg{background:var(--warnbg);color:var(--warn);border-radius:8px;padding:8px 12px;font-size:13px;font-weight:500}
+.opt{display:flex;gap:8px;align-items:flex-start;font-size:14px}
+.opt input{margin-top:4px;width:16px;height:16px;accent-color:var(--accent)}
+#status{min-height:20px;font-size:14px;color:var(--muted)}
+.results{display:flex;flex-direction:column;gap:12px}
+.results img{max-width:100%;height:auto;border:1px solid var(--line);border-radius:8px}
+#offscreen{position:fixed;left:-12000px;top:0;pointer-events:none}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Generator Label TOGA</h1>
+    <p class="sub">Isi data tanaman, pilih salah satu dari empat gaya, lalu unduh PDF atau PNG siap cetak. Data tersimpan di browser ini.</p>
+  </header>
+
+  <section aria-label="Daftar label">
+    <div class="listhead">
+      <h2>Daftar label</h2>
+      <div class="actions">
+        <button class="btn ghost" id="allStyle" type="button">Pakai gaya ini untuk semua</button>
+        <button class="btn" id="add" type="button">+ Label baru</button>
+      </div>
+    </div>
+    <div class="thumbs" id="thumbs"></div>
+  </section>
+
+  <main class="grid">
+    <section class="panel" aria-label="Data tanaman">
+      <div class="field">
+        <span class="lab" id="styleLab">Gaya label</span>
+        <div class="chips" id="styles" role="group" aria-labelledby="styleLab"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label for="owner">Nama pemilik</label><input type="text" id="owner" autocomplete="off"></div>
+        <div class="field"><label for="dw">Kelompok</label><input type="text" id="dw" autocomplete="off"></div>
+      </div>
+      <div class="field"><label for="name">Nama tanaman obat</label><input type="text" id="name" autocomplete="off"></div>
+      <div class="row2" style="grid-template-columns:1fr 1fr">
+        <div class="field"><label for="alias">Nama lain (opsional)</label><input type="text" id="alias" autocomplete="off"></div>
+        <div class="field"><label for="latin">Nama latin</label><input type="text" id="latin" autocomplete="off"></div>
+      </div>
+      <div class="field"><label for="senyawa">Kandungan senyawa</label><input type="text" id="senyawa" autocomplete="off"></div>
+      <div class="field">
+        <label for="manfaat">Manfaat tanaman</label>
+        <textarea id="manfaat" rows="7"></textarea>
+        <span class="hint">Satu poin per baris. Tulis "Judul: penjelasan" supaya judulnya tercetak tebal.</span>
+      </div>
+      <div class="field">
+        <label for="cara">Cara pengolahan</label>
+        <textarea id="cara" rows="5"></textarea>
+        <span class="hint">Satu cara per baris, misalnya "Air rebusan: ...".</span>
+      </div>
+      <div class="field" id="leafField">
+        <label for="leaf">Warna ilustrasi daun (gaya D)</label>
+        <select id="leaf"><option value="hijau">Hijau</option><option value="ungu">Ungu</option><option value="jingga">Jingga</option><option value="biru">Biru</option></select>
+      </div>
+      <div class="actions"><button class="btn danger" id="del" type="button">Hapus label ini</button></div>
+    </section>
+
+    <section class="panel" aria-label="Pratinjau dan unduh">
+      <div id="fitmsg" class="fitmsg" hidden>Teks melebihi area label. Ringkas manfaat atau cara pengolahan, atau pilih gaya lain.</div>
+      <div class="stagebox" id="stage"><div class="paper" id="paper"><div id="preview"></div></div></div>
+      <label class="opt"><input type="checkbox" id="twoUp"><span>Hemat kertas: 2 label per lembar A4 (untuk PDF semua label)</span></label>
+      <div class="actions">
+        <button class="btn" id="pdfAll" type="button">Unduh PDF semua label</button>
+        <button class="btn ghost" id="pngOne" type="button">Unduh PNG label ini</button>
+      </div>
+      <div id="status" role="status" aria-live="polite"></div>
+      <div id="results" class="results"></div>
+    </section>
+  </main>
+</div>
+<div id="offscreen" aria-hidden="true"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+(function(){
+var STYLES={A:{n:'A Klasik herbal',w:560,h:794},B:{n:'B Gelap modern',w:560,h:794},C:{n:'C Ceria pastel',w:560,h:794},D:{n:'D Papan taman',w:794,h:559}};
+var FIELDS=['owner','dw','name','alias','latin','senyawa','manfaat','cara','leaf'];
+var KEY='toga.labels.v1';
+
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function lines(t){return String(t||'').split('\n').map(function(s){return s.trim();}).filter(Boolean);}
+function rich(s,color){var m=s.match(/^([^:]{2,70}):\s*(.+)$/);if(!m)return esc(s);return '<b'+(color?' style="color:'+color+'"':'')+'>'+esc(m[1])+':</b> '+esc(m[2]);}
+function metrics(d){var m=lines(d.manfaat),c=lines(d.cara);var len=m.join('').length+c.join('').length+String(d.senyawa||'').length;
+  return {m:m,c:c,len:len,z:len<800?13:len<1000?12.5:len<1200?12:11.5,gap:len<800?14:11};}
+
+var LEAF={hijau:['#3E8E5A','#2F7A4B','#2F7A4B'],ungu:['#7F4E96','#6E3F86','#6E3F86'],jingga:['#E58A3C','#C96F22','#B05A12'],biru:['#4F86C6','#3C6FAE','#2F5E9A']};
+
+var LEAFSVG='<svg viewBox="0 0 24 24" fill="none" stroke="#E8B84A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="34" height="34"><path d="M20 4C10 4 4 9 4 15c0 2 1 4 3 5 6 1 13-3 13-16z"/><path d="M4 20c3-6 7-9 12-11"/></svg>';
+
+/* ---------- Gaya A ---------- */
+function rA(d){var k=metrics(d),z=k.z,g=k.gap;
+  var nm=d.name||'Nama tanaman',fs=nm.length<=16?32:nm.length<=22?28:24;
+  var dot=function(h){return '<div style="display:flex;gap:10px"><span style="width:8px;height:8px;border-radius:999px;background:#E8B84A;margin-top:'+Math.round(z*0.55)+'px;flex:none"></span><span>'+h+'</span></div>';};
+  var sec=function(t){return '<span style="font-size:12px;font-weight:700;letter-spacing:2px;color:#3E8E5A">'+t+'</span>';};
+  var h='<div style="width:560px;height:794px;box-sizing:border-box;padding:20px;background:#E8B84A;font-family:\'Nunito\',sans-serif;color:#1E3A2B">'+
+  '<div data-fit style="width:100%;height:100%;box-sizing:border-box;background:#FBF6E9;border-radius:26px;border:3px solid #1F4D3A;overflow:hidden;display:flex;flex-direction:column">'+
+  '<div style="background:#1F4D3A;padding:18px 26px;display:flex;align-items:center;justify-content:space-between;gap:12px"><div style="display:flex;align-items:center;gap:12px">'+LEAFSVG+
+  '<div style="display:flex;flex-direction:column"><span style="font-size:11px;letter-spacing:3px;font-weight:700;color:#BFE3C8">LABEL</span><span style="font-size:20px;letter-spacing:1px;font-weight:800;color:#FBF6E9">TANAMAN OBAT KELUARGA</span></div></div>'+
+  '<div style="background:#E8B84A;color:#1F4D3A;font-weight:800;font-size:18px;padding:6px 16px;border-radius:999px">'+esc(d.dw)+'</div></div>'+
+  '<div style="padding:'+(g+4)+'px 26px 14px;display:flex;flex-direction:column;gap:'+g+'px;flex:1">'+
+  '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:#E3F1E6;border-radius:14px;padding:10px 16px">'+sec('NAMA PEMILIK')+'<span style="font-size:20px;font-weight:800;color:#1F4D3A">'+esc(d.owner||'Nama pemilik')+'</span></div>'+
+  '<div style="display:flex;flex-direction:column;gap:2px">'+sec('NAMA TANAMAN OBAT')+
+  '<span style="font-family:\'Fraunces\',serif;font-weight:700;font-size:'+fs+'px;line-height:1.1;color:#1F4D3A">'+esc(nm)+(d.alias?' <span style="font-size:20px;font-weight:600">('+esc(d.alias)+')</span>':'')+'</span>'+
+  (d.latin?'<span style="font-family:\'Fraunces\',serif;font-style:italic;font-weight:500;font-size:17px;color:#3E8E5A">'+esc(d.latin)+'</span>':'')+'</div>'+
+  (d.senyawa?'<div style="display:flex;flex-direction:column;gap:4px">'+sec('KANDUNGAN SENYAWA')+'<span style="font-size:14px;line-height:1.4;font-weight:600">'+esc(d.senyawa)+'</span></div>':'')+
+  (k.m.length?'<div style="display:flex;flex-direction:column;gap:6px">'+sec('MANFAAT TANAMAN')+'<div style="display:flex;flex-direction:column;gap:'+(g>12?6:4)+'px;font-size:'+z+'px;line-height:1.4">'+k.m.map(function(x){return dot(rich(x));}).join('')+'</div></div>':'')+
+  (k.c.length?'<div style="background:#1F4D3A;color:#FBF6E9;border-radius:16px;padding:14px 18px;display:flex;flex-direction:column;gap:7px">'+'<span style="font-size:12px;font-weight:700;letter-spacing:2px;color:#E8B84A">CARA PENGOLAHAN</span>'+k.c.map(function(x){return '<div style="font-size:'+z+'px;line-height:1.45">'+rich(x,'#E8B84A')+'</div>';}).join('')+'</div>':'')+
+  '</div></div></div>';
+  return h;}
+
+/* ---------- Gaya B ---------- */
+function rB(d){var k=metrics(d),z=k.z,g=k.gap;
+  var nm=d.name||'Nama tanaman',fs=nm.length<=12?44:nm.length<=18?40:34;
+  var sub=[d.alias,d.latin].filter(Boolean).map(esc).join(' &middot; ');
+  var lab=function(t){return '<span style="font-size:11px;font-weight:600;letter-spacing:3px;color:#C6F35A">'+t+'</span>';};
+  return '<div data-fit style="width:560px;height:794px;box-sizing:border-box;padding:30px 32px;background:#10302A;font-family:\'Space Grotesk\',sans-serif;color:#F3F7EC;display:flex;flex-direction:column;gap:'+(g+2)+'px;overflow:hidden">'+
+  '<div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:12px;font-weight:600;letter-spacing:3px;color:#C6F35A">TANAMAN OBAT KELUARGA</span><span style="background:#C6F35A;color:#10302A;font-weight:700;font-size:15px;padding:5px 14px;border-radius:8px">'+esc(d.dw)+'</span></div>'+
+  '<div style="display:flex;flex-direction:column;gap:4px;padding-bottom:12px;border-bottom:2px solid #2E5A4C"><span style="font-size:13px;color:#A9CBB9">Pemilik: <b style="color:#F3F7EC;font-size:17px">'+esc(d.owner||'Nama pemilik')+'</b></span>'+
+  '<span style="font-size:'+fs+'px;line-height:1.04;font-weight:700;letter-spacing:-1px;margin-top:4px">'+esc(nm)+'</span>'+(sub?'<span style="font-size:16px;color:#C6F35A;font-style:italic">'+sub+'</span>':'')+'</div>'+
+  (d.senyawa?'<div style="display:flex;flex-direction:column;gap:4px">'+lab('KANDUNGAN SENYAWA')+'<span style="font-size:14px;line-height:1.4">'+esc(d.senyawa)+'</span></div>':'')+
+  (k.m.length?'<div style="display:flex;flex-direction:column;gap:6px">'+lab('MANFAAT')+'<div style="display:flex;flex-direction:column;gap:'+(g>12?7:5)+'px;font-size:'+z+'px;line-height:1.38">'+k.m.map(function(x,i){return '<div style="display:flex;gap:10px"><span style="color:#C6F35A;font-weight:700">'+(i<9?'0':'')+(i+1)+'</span><span>'+rich(x)+'</span></div>';}).join('')+'</div></div>':'')+
+  (k.c.length?'<div style="margin-top:auto;background:#1B4A3E;border-radius:14px;padding:14px 18px;display:flex;flex-direction:column;gap:6px">'+lab('CARA PENGOLAHAN')+k.c.map(function(x){return '<div style="font-size:'+z+'px;line-height:1.42">'+rich(x,'#C6F35A')+'</div>';}).join('')+'</div>':'')+
+  '</div>';}
+
+/* ---------- Gaya C ---------- */
+function rC(d){var k=metrics(d),z=k.z,g=k.gap;
+  var nm=d.name||'Nama tanaman',fs=nm.length<=14?40:nm.length<=20?34:28;
+  var sub=[d.alias,d.latin?'<i>'+esc(d.latin)+'</i>':''].filter(Boolean);
+  sub=[d.alias?esc(d.alias):'',d.latin?'<i>'+esc(d.latin)+'</i>':''].filter(Boolean).join(' &middot; ');
+  var lab=function(t,c){return '<span style="font-size:12px;font-weight:800;letter-spacing:2px;color:'+(c||'#1F7A44')+'">'+t+'</span>';};
+  var card='background:#FFFFFF;border:2.5px solid #2F9E5B;border-radius:20px;padding:11px 18px;display:flex;flex-direction:column;gap:5px';
+  return '<div data-fit style="width:560px;height:794px;box-sizing:border-box;background:#FFF1C9;font-family:\'Nunito\',sans-serif;color:#23412F;display:flex;flex-direction:column;overflow:hidden">'+
+  '<div style="background:#2F9E5B;padding:24px 30px 40px 30px;border-radius:0 0 48px 48px;display:flex;flex-direction:column;gap:6px;flex:none"><div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:12px;font-weight:800;letter-spacing:2px;color:#FFF1C9">TANAMAN OBAT KELUARGA</span><span style="background:#F28C38;color:#FFFFFF;font-family:\'Baloo 2\',sans-serif;font-weight:800;font-size:18px;padding:2px 16px;border-radius:999px">'+esc(d.dw)+'</span></div>'+
+  '<span style="font-family:\'Baloo 2\',sans-serif;font-weight:800;font-size:'+fs+'px;line-height:1;color:#FFFFFF;margin-top:4px">'+esc(nm)+'</span>'+(sub?'<span style="font-size:15px;font-weight:700;color:#FFF1C9">'+sub+'</span>':'')+'</div>'+
+  '<div style="padding:0 26px 18px;display:flex;flex-direction:column;gap:'+(g-3)+'px;margin-top:-20px;flex:1">'+
+  '<div style="background:#FFFFFF;border:2.5px solid #F28C38;border-radius:20px;padding:8px 18px;display:flex;align-items:center;justify-content:space-between">'+lab('PEMILIK','#C25E0E')+'<span style="font-family:\'Baloo 2\',sans-serif;font-weight:800;font-size:24px;color:#23412F">'+esc(d.owner||'Nama pemilik')+'</span></div>'+
+  (d.senyawa?'<div style="'+card+'">'+lab('KANDUNGAN SENYAWA')+'<span style="font-size:14px;line-height:1.4;font-weight:600">'+esc(d.senyawa)+'</span></div>':'')+
+  (k.m.length?'<div style="'+card+'">'+lab('MANFAAT TANAMAN')+'<div style="display:flex;flex-direction:column;gap:'+(g>12?5:4)+'px;font-size:'+z+'px;line-height:1.38">'+k.m.map(function(x){return '<div style="display:flex;gap:10px"><span style="width:9px;height:9px;border-radius:999px;background:#F28C38;margin-top:'+Math.round(z*0.5)+'px;flex:none"></span><span>'+rich(x)+'</span></div>';}).join('')+'</div></div>':'')+
+  (k.c.length?'<div style="background:#23412F;color:#FFF1C9;border-radius:20px;padding:12px 18px;display:flex;flex-direction:column;gap:5px">'+lab('CARA PENGOLAHAN','#FFC56B')+k.c.map(function(x){return '<div style="font-size:'+z+'px;line-height:1.42">'+rich(x,'#FFC56B')+'</div>';}).join('')+'</div>':'')+
+  '</div></div>';}
+
+/* ---------- Gaya D ---------- */
+function rD(d){var k=metrics(d),z=k.z-0.5;
+  var nm=d.name||'Nama tanaman',fs=nm.length<=10?34:nm.length<=18?30:26;
+  var lc=LEAF[d.leaf]||LEAF.hijau;
+  var head=function(t){return '<span style="font-family:\'Cormorant Garamond\',serif;font-weight:700;font-size:19px;margin-top:10px;color:'+lc[2]+'">'+t+'</span>';};
+  var row='border-top:1px solid #1D3328;';
+  var svg='<svg viewBox="0 0 200 250" width="200" height="250" aria-hidden="true" style="margin-top:6px;flex:none"><path d="M100 242 C100 190 98 130 100 36" stroke="#2F6B45" stroke-width="4" fill="none" stroke-linecap="round"/>'+
+   '<path d="M100 214 C72 214 46 200 34 176 C64 172 90 188 100 214Z" fill="'+lc[0]+'"/><path d="M100 214 C128 214 154 200 166 176 C136 172 110 188 100 214Z" fill="'+lc[1]+'"/>'+
+   '<path d="M100 170 C74 168 52 154 42 130 C70 128 92 142 100 170Z" fill="'+lc[1]+'"/><path d="M100 170 C126 168 148 154 158 130 C130 128 108 142 100 170Z" fill="'+lc[0]+'"/>'+
+   '<path d="M100 126 C78 122 60 108 52 86 C76 84 94 98 100 126Z" fill="'+lc[0]+'"/><path d="M100 126 C122 122 140 108 148 86 C124 84 106 98 100 126Z" fill="'+lc[1]+'"/>'+
+   '<path d="M100 84 C84 78 72 64 68 46 C86 46 98 60 100 84Z" fill="'+lc[1]+'"/><path d="M100 84 C116 78 128 64 132 46 C114 46 102 60 100 84Z" fill="'+lc[0]+'"/>'+
+   '<circle cx="100" cy="30" r="7" fill="#E9F3E4" stroke="#2F6B45" stroke-width="2"/></svg>';
+  return '<div data-fit style="width:794px;height:559px;box-sizing:border-box;padding:30px 40px;background:#F3F6F1;font-family:\'Lora\',serif;color:#1D3328;display:flex;gap:36px;overflow:hidden">'+
+  '<div style="width:250px;flex:none;display:flex;flex-direction:column;align-items:center;gap:10px">'+
+  '<span style="font-family:\'Cormorant Garamond\',serif;font-weight:600;font-size:'+fs+'px;line-height:1.08;letter-spacing:4px;text-align:center;text-transform:uppercase;overflow-wrap:anywhere">'+esc(nm)+'</span>'+
+  (d.latin?'<div style="width:100%;border-top:1px solid #1D3328;border-bottom:1px solid #1D3328;padding:5px 0;text-align:center;font-family:\'Cormorant Garamond\',serif;font-weight:600;font-size:14px;letter-spacing:2px;text-transform:uppercase">'+esc(d.latin)+'</div>':'')+
+  (d.alias?'<span style="font-size:12px;font-style:italic;color:#5B6B60">'+esc(d.alias)+'</span>':'')+svg+
+  '<div style="width:100%;margin-top:auto;border-top:1px solid #1D3328;padding-top:7px;display:flex;flex-direction:column;gap:3px;font-size:12.5px"><div style="display:flex;justify-content:space-between;gap:8px"><b>Pemilik</b><span>'+esc(d.owner||'Nama pemilik')+'</span></div><div style="display:flex;justify-content:space-between;gap:8px"><b>Kelompok</b><span>'+esc(d.dw)+'</span></div></div></div>'+
+  '<div style="flex:1;min-width:0;display:flex;flex-direction:column;font-size:'+z+'px;line-height:1.4;overflow-wrap:break-word">'+
+  (d.senyawa?'<div style="'+row+'border-bottom:1px solid #1D3328;padding:6px 0;display:flex;gap:12px"><b style="width:110px;flex:none">Kandungan senyawa</b><span>'+esc(d.senyawa)+'</span></div>':'')+
+  (k.m.length?head('Manfaat tanaman')+'<div style="display:flex;flex-direction:column;gap:4px;margin-top:3px">'+k.m.map(function(x){return '<div style="display:flex;gap:8px"><span style="color:'+lc[2]+'">&#8226;</span><span>'+rich(x)+'</span></div>';}).join('')+'</div>':'')+
+  (k.c.length?head('Cara pengolahan')+'<div style="display:flex;flex-direction:column;gap:4px;margin-top:3px">'+k.c.map(function(x){return '<div>'+rich(x)+'</div>';}).join('')+'</div>':'')+
+  '</div></div>';}
+
+var RENDER={A:rA,B:rB,C:rC,D:rD};
+
+/* ---------- Data ---------- */
+function uid(){return 'l'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+function blank(style){return {id:uid(),style:style||'A',owner:'',dw:'DW 1',name:'',alias:'',latin:'',senyawa:'',manfaat:'',cara:'',leaf:'hijau'};}
+function defaults(){return [
+ {id:uid(),style:'A',owner:'Ibu Daisah',dw:'DW 1',name:'Pohon Handeleum',alias:'Daun Ungu',latin:'Graptophyllum pictum',senyawa:'Flavonoid, Tanin, Alkaloid, Saponin, Steroid, dan Glikosida.',
+  manfaat:'Antiinflamasi dan analgesik: membantu mengecilkan pembengkakan pembuluh darah di area anus serta meredakan nyeri.\nMelancarkan buang air besar dan sembelit.\nMeredakan peradangan dan nyeri.\nMembantu menurunkan kadar gula darah.',
+  cara:'Air rebusan: rebus 5-7 lembar daun handeleum segar ke dalam 3 gelas air hingga menyisakan 1 gelas, lalu diminum setelah dingin.\nPemakaian luar: tumbuk halus daun segar lalu tempelkan pada bisul atau area kulit yang bengkak.',leaf:'ungu'},
+ {id:uid(),style:'A',owner:'Ibu Hadi',dw:'DW 1',name:'Sambiloto',alias:'',latin:'Andrographis paniculata',senyawa:'Andrografolida',
+  manfaat:'Meningkatkan daya tahan tubuh: menguatkan sistem imun dan melawan infeksi bakteri serta virus.\nMeredakan flu dan gejala saluran pernapasan: batuk, pilek, demam, serta radang tenggorokan.\nMengatasi peradangan: menekan sitokin penyebab peradangan, baik untuk nyeri sendi atau radang ringan.\nMenurunkan dan menstabilkan gula darah: meningkatkan sensitivitas insulin dan mengontrol kadar glukosa.\nMenurunkan tekanan darah: membantu memperlebar pembuluh darah agar aliran darah lebih lancar.\nMenjaga kesehatan hati (hepatoprotektor): melindungi fungsi hati dari kerusakan akibat radikal bebas.',
+  cara:'Air rebusan daun segar: siapkan 5-7 lembar daun sambiloto segar dan 2-3 gelas air putih.\nPemakaian luar: tumbuk atau haluskan daun sampai lembut (tambahkan sedikit air matang jika terlalu kering), oleskan atau tempelkan pada kulit yang gatal, meradang, atau berjerawat selama kurang lebih 10 menit, lalu bilas dengan air bersih.',leaf:'hijau'}
+];}
+var labels=[],cur=null;
+try{var raw=localStorage.getItem(KEY);if(raw){var p=JSON.parse(raw);if(Array.isArray(p)&&p.length)labels=p;}}catch(e){}
+if(!labels.length)labels=defaults();
+cur=labels[0].id;
+function save(){try{localStorage.setItem(KEY,JSON.stringify(labels));}catch(e){}}
+function getCur(){for(var i=0;i<labels.length;i++)if(labels[i].id===cur)return labels[i];return labels[0];}
+
+var $=function(id){return document.getElementById(id);};
+function setStatus(t){$('status').textContent=t||'';}
+
+/* ---------- UI ---------- */
+function renderStyles(){var box=$('styles');box.innerHTML='';var c=getCur();
+  Object.keys(STYLES).forEach(function(k){var b=document.createElement('button');b.type='button';b.className='chip';b.textContent=STYLES[k].n;b.setAttribute('aria-pressed',String(c.style===k));
+    b.addEventListener('click',function(){getCur().style=k;save();renderAll(false);});box.appendChild(b);});
+  $('leafField').hidden=(c.style!=='D');}
+function loadForm(){var c=getCur();FIELDS.forEach(function(f){$(f).value=c[f]||'';});}
+function fitScale(w){var avail=Math.max(200,$('stage').clientWidth-32);return Math.min(1,avail/w);}
+function renderPreview(){var c=getCur(),S=STYLES[c.style];var sc=fitScale(S.w);
+  var pv=$('preview');pv.innerHTML=RENDER[c.style](c);pv.style.width=S.w+'px';pv.style.height=S.h+'px';pv.style.transform='scale('+sc+')';
+  var paper=$('paper');paper.style.width=Math.round(S.w*sc)+'px';paper.style.height=Math.round(S.h*sc)+'px';
+  var el=pv.querySelector('[data-fit]');$('fitmsg').hidden=!(el&&el.scrollHeight>el.clientHeight+2);}
+function renderThumbs(){var box=$('thumbs');box.innerHTML='';
+  labels.forEach(function(l){var S=STYLES[l.style];var tw=S.w>S.h?170:110,sc=tw/S.w;
+    var b=document.createElement('button');b.type='button';b.className='thumb';b.setAttribute('aria-current',String(l.id===cur));
+    var tv=document.createElement('div');tv.className='tv';tv.style.width=tw+'px';tv.style.height=Math.round(S.h*sc)+'px';
+    var inner=document.createElement('div');inner.style.cssText='width:'+S.w+'px;height:'+S.h+'px;transform:scale('+sc+');transform-origin:top left;pointer-events:none';inner.innerHTML=RENDER[l.style](l);tv.appendChild(inner);
+    var t=document.createElement('b');t.textContent=l.name||'Label baru';var m=document.createElement('span');m.className='m';m.textContent=(l.owner||'Tanpa pemilik')+' · '+l.style;
+    b.appendChild(tv);b.appendChild(t);b.appendChild(m);
+    b.addEventListener('click',function(){cur=l.id;renderAll(true);});box.appendChild(b);});}
+function renderAll(form){renderStyles();if(form)loadForm();renderPreview();renderThumbs();}
+
+FIELDS.forEach(function(f){$(f).addEventListener('input',function(){getCur()[f]=$(f).value;save();renderPreview();renderThumbs();});});
+$('add').addEventListener('click',function(){var n=blank(getCur().style);labels.push(n);cur=n.id;save();renderAll(true);$('owner').focus();});
+$('allStyle').addEventListener('click',function(){var s=getCur().style;labels.forEach(function(l){l.style=s;});save();renderAll(false);setStatus('Semua label memakai gaya '+STYLES[s].n+'.');});
+var delArm=null;
+$('del').addEventListener('click',function(){var b=$('del');
+  if(!delArm){b.textContent='Klik lagi untuk menghapus';delArm=setTimeout(function(){delArm=null;b.textContent='Hapus label ini';},3000);return;}
+  clearTimeout(delArm);delArm=null;b.textContent='Hapus label ini';
+  var i=labels.findIndex(function(l){return l.id===cur;});labels.splice(i,1);if(!labels.length)labels.push(blank('A'));cur=labels[Math.max(0,i-1)].id;save();renderAll(true);});
+if(window.ResizeObserver){new ResizeObserver(function(){renderPreview();}).observe($('stage'));}else{window.addEventListener('resize',renderPreview);}
+
+/* ---------- Ekspor ---------- */
+function slug(s){return String(s||'label').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'')||'label';}
+async function fontsReady(){try{var specs=['700 20px "Fraunces"','800 20px "Nunito"','700 20px "Space Grotesk"','800 20px "Baloo 2"','600 20px "Cormorant Garamond"','400 14px "Lora"'];
+  await Promise.all(specs.map(function(s){return document.fonts.load(s);}));await document.fonts.ready;}catch(e){}}
+async function toCanvas(d){var S=STYLES[d.style],host=$('offscreen');host.innerHTML='';var wrap=document.createElement('div');wrap.style.cssText='width:'+S.w+'px;height:'+S.h+'px';wrap.innerHTML=RENDER[d.style](d);host.appendChild(wrap);
+  var cv=await html2canvas(wrap.firstElementChild,{scale:3,backgroundColor:'#ffffff',logging:false});host.innerHTML='';return {cv:cv,land:S.w>S.h};}
+async function save1(name,blob){var dl=null;try{if(window.claude&&window.claude.use)dl=await window.claude.use('downloads');}catch(e){dl=null;}
+  if(!dl)throw {code:'unavailable'};return dl.save({filename:name,data:blob});}
+function errText(e){var c=e&&e.code;if(c==='declined')return 'Unduhan dibatalkan.';if(c==='unavailable'||c==='not_granted'||c==='capability_disabled'||c==='capability_removed')return 'Unduh file langsung tidak tersedia di tampilan ini. Label ditampilkan sebagai gambar di bawah: klik kanan (atau tekan lama di HP) lalu simpan gambar. Untuk PDF, buka halaman ini lewat tautan artifact di claude.ai.';return 'Gagal membuat file: '+((e&&e.message)||'coba lagi.');}
+function busy(on){['pdfAll','pngOne'].forEach(function(i){$(i).disabled=on;});}
+function showImages(cvs){var box=$('results');box.innerHTML='';cvs.forEach(function(cv,i){var im=document.createElement('img');im.alt='Label '+(i+1);im.src=cv.toDataURL('image/png');im.style.maxWidth='100%';box.appendChild(im);});}
+
+$('pngOne').addEventListener('click',async function(){busy(true);setStatus('Membuat PNG...');var r=null;$('results').innerHTML='';
+  try{var c=getCur();await fontsReady();r=await toCanvas(c);var blob=await new Promise(function(res){r.cv.toBlob(res,'image/png');});
+    await save1('label-'+slug(c.owner+' '+c.name)+'.png',blob);setStatus('PNG tersimpan.');}catch(e){setStatus(errText(e));if(e&&e.code==='unavailable'&&r)showImages([r.cv]);}busy(false);});
+
+$('pdfAll').addEventListener('click',async function(){busy(true);var items=[];$('results').innerHTML='';
+  try{await fontsReady();
+    for(var i=0;i<labels.length;i++){setStatus('Membuat label '+(i+1)+' dari '+labels.length+'...');items.push(await toCanvas(labels[i]));}
+    setStatus('Menyusun PDF...');var J=window.jspdf.jsPDF,pdf=null;
+    var add=function(pw,ph){var o=pw>ph?'l':'p';if(!pdf){pdf=new J({unit:'mm',format:[pw,ph],orientation:o});}else{pdf.addPage([pw,ph],o);}};
+    var img=function(cv,x,y,w,h){pdf.addImage(cv.toDataURL('image/jpeg',0.92),'JPEG',x,y,w,h);};
+    if($('twoUp').checked){
+      var por=items.filter(function(x){return !x.land;}),lan=items.filter(function(x){return x.land;});
+      for(var a=0;a<por.length;a+=2){add(297,210);img(por[a].cv,0,0,148.5,210);if(por[a+1])img(por[a+1].cv,148.5,0,148.5,210);}
+      for(var b=0;b<lan.length;b+=2){add(210,297);img(lan[b].cv,0,0,210,148.5);if(lan[b+1])img(lan[b+1].cv,0,148.5,210,148.5);}
+    }else{items.forEach(function(x){if(x.land){add(210,148.5);img(x.cv,0,0,210,148.5);}else{add(148.5,210);img(x.cv,0,0,148.5,210);}});}
+    var blob=pdf.output('blob');await save1('label-toga.pdf',blob);setStatus('PDF tersimpan ('+labels.length+' label).');}
+  catch(e){setStatus(errText(e));if(e&&e.code==='unavailable'&&items.length)showImages(items.map(function(x){return x.cv;}));}busy(false);});
+
+loadForm();renderAll(false);
+})();
+</script>
+
+</body></html>
